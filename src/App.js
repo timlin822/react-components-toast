@@ -1,24 +1,41 @@
-import logo from './logo.svg';
+import {useState,useEffect} from 'react';
+
+import Toast from 'components/toast/Toast';
+
 import './App.css';
 
 function App() {
+  const [toastIsOpen,setToastIsOpen]=useState(false);
+  const toast={
+    type: "warning",
+    title: "Warning",
+    message: "警告成功"
+  };
+
+  const toastOpenHandler=()=>{
+    setToastIsOpen(true);
+  };
+  const toastCloseHandler=()=>{
+    setToastIsOpen(false);
+  };
+
+  useEffect(()=>{
+    const timeoutId=setTimeout(()=>{
+      toastCloseHandler();
+    },3000);
+
+    return ()=>{
+      clearTimeout(timeoutId);
+    }
+  },[toastIsOpen]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <section className="section-padding bg-height">
+      <div className="container container-padding">
+        <button className="btn btn-warning" onClick={toastOpenHandler}>Warning</button>
+        <Toast toastIsOpen={toastIsOpen} toast={toast} toastCloseHandler={toastCloseHandler} />
+      </div>
+    </section>
   );
 }
 
